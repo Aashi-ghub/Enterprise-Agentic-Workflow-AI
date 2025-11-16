@@ -1,218 +1,132 @@
-<h1 align="center">💬 Agent Pilot</h1>
+<h1 align="center">🚀 AxiomFlow — AI Workflow Automation Engine</h1> <p align="center"> AxiomFlow is an advanced agentic automation system designed to create, orchestrate, and execute complex AI workflows with ease. Built for researchers, founders, and power-users who want end-to-end control over multi-agent systems, branching logic, tools, and custom automations. <br><br> Whether you want to chat with a single LLM, run a chain of agents, or automate an entire operational pipeline, AxiomFlow provides a clean, extensible platform to build it fast. </p>
+🌟 What AxiomFlow Enables
+🧠 Build Advanced AI Agents
 
-<p align="center">️
-  <img src="docs/demo.png" width="600px" alt="AgentPilot desktop demo" />
-<br><br>
-A versatile workflow automation system. Create, organize, and execute complex AI-driven tasks.
-Agent Pilot provides a seamless experience, whether you want to chat with a single LLM or a complex multi-member workflow.
-<br><br>
-With an intuitive and feature-rich interface, you can effortlessly design AI workflows and chat with them in real-time.
-Branching chats are supported, allowing flexible interactions and iterative refinement.
-<br><br>
-Agent Pilot offers generative and customizable UI, allowing creation of custom pages and hierarchical configs.
-This flexibility gives you the freedom to design an interface that aligns with your specific needs and effortlessly integrate into your workflows.
-<br><br>
-The system supports scheduled and recurring workflows that can be set to run based on natural language expressions of time, enabling automation that ranges from every second to every leap year.
-</p>
+Create agents with custom tools, memory, and behavior.
 
-<div align="center">
+Nest multi-agent systems inside a single reusable block.
 
-[![Discord](https://img.shields.io/discord/1169291612816420896?style=flat)](https://discord.gg/ge2ZzDGu9e)
-[![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/AgentPilotAI)](https://twitter.com/AgentPilotAI)
-</div>
+Organize agents in folders for long-term scalability.
 
-<p align="center">
-  <img src="docs/demo.gif" align="center" height="255px" alt="AgentPilot gif demo" style="margin-right: 20px;" />
-  <img src="docs/Screenshot3.png" align="center" height="250px" alt="AgentPilot gif demo" style="margin-right: 20px;" />
-  <img src="docs/Screenshot1.png" align="center" height="250px" alt="AgentPilot gif demo" style="margin-right: 20px;" />
-</p>
-<p align="center">
-  <img src="docs/Screenshot2.png" align="center" height="250px" alt="AgentPilot gif demo" style="margin-right: 20px;" />
-  <img src="docs/Screenshot4.png" align="center" height="250px" alt="AgentPilot gif demo" style="margin-right: 20px;" />
-</p>
+🔀 Branching & Graph-Based Workflows
 
-## Quickstart
+AxiomFlow includes a visual workflow builder with:
 
-### Binaries
-<table>
-  <tr>
-	<th>Platform</th>
-	<th>Downloads</th>
-  </tr>
-  <tr>
-	<td><b>Linux</b></td>
-	<td>
-<b><a href="https://sourceforge.net/projects/agentpilot/files/v0.5.1/AgentPilot_0.5.1_Linux.tar.gz/download" target="_blank">AgentPilot_0.5.1_Linux.tar.gz</a></b><br>
-<b>MD5:</b>  e74e736e3efbd459b411ecffc45e936e<br>
-<b>SHA1:</b> 93b12bd208095f8d8b34395446de23d233a1baed<br>
-	</td>
-  </tr>
-  <tr>
-	<td><b>Windows</b></td>
-	<td>
-<b><a href="https://sourceforge.net/projects/agentpilot/files/v0.5.1/AgentPilot_0.5.1_Windows.zip/download" target="_blank">AgentPilot_0.5.1_Windows.zip</a></b><br>
-<b>MD5:</b> 17079a8f2faf9683c59d11d0b67a8092<br>
-<b>SHA1:</b> c5a30c02f17782ead98c24098e874c9ba2edc950<br>
-	</td>
-  </tr>
-  <tr>
-	<td><b>Mac Intel</b></td>
-	<td>
-<b><a href="https://sourceforge.net/projects/agentpilot/files/v0.5.1/AgentPilot_0.5.1_Mac_Intel.tar.gz/download" target="_blank">AgentPilot_0.5.1_Mac_Intel.tar.gz</a></b><br>
-<b>MD5:</b> 2e1e03e5305ea279df1b76d1a8074cb7<br>
-<b>SHA1:</b> 9369152f1b69ff2a4ca476ecf1b377b5ce0e072b<br>
-	</td>
-  </tr>
-</table>
+Executable blocks (Text, Agent, Code, Prompt, Workflow, Module)
 
+Parallel execution (vertical alignment = run in parallel)
 
-Building from source: [How to build from source](docs/guides/how_to_build.md) <br>
+Iterative refinement through editable branching
 
-> [!TIP]
-> You can migrate your old database to the new version by replacing your executable with the new one before starting the application.
+Reusable blocks & templates
 
-## Features
+Multi-member workflow execution
 
-###  👤 Create Agents
-Create new agents, edit their configuration and organise them into folders.<br>
-Multi-member workflows can be saved as a single agent and nested infinitely.
+Perfect for async pipelines, RAG systems, and multi-step reasoning.
 
-### 📝 Manage Chats
-View, continue and delete previous workflow chats and organise them into folders.<br>
+🧩 Tools, Code Blocks & Modules
 
-### 🌱 Branching Workflows
-Messages, tools and code can be edited and re-run, allowing a more practical way to chat with your workflow.<br>
-Branching works with all plugins and multi-member chats.<br>
+Extend your agents with real functionality:
 
-### 👥 Graph Workflows
-Seamlessly add other members or blocks to a workflow and configure how they interact with each other.<br>
-Members aligned vertically are executed in parallel.
+Add tools that execute Python, JS, shell commands, or full workflows
 
-Available members:
-- **User** - This is you and will await your input.
-- **Agent** - Gets an LLM response with integrated tools and messages.
-- **Text** - A simple text block that can nest other blocks.
-- **Code** - Gets the output of any given code.
-- **Prompt** - Gets an LLM response from a single prompt.
-- **Module** - Runs or retrieves a method or variable from any module.
-- **Workflow** - Any combination of the above types.
+Build modular logic using reusable blocks
 
-### 📦 Blocks
-Manage a collection of nestable blocks available to use in any workflow or text field, 
-allowing reusability and consistency.<br>
-By default a block is a simple text block, but it can be any of the above member types, even a multi-member workflow.<br>
-These can be quickly dropped into any workflow, or used in text fields (such as system message) by using the block name in curly braces, e.g. `{block-name}`.
+Import custom modules dynamically at runtime
 
-### 🔨 Tools
-Create and manage tools which can be assigned to agents.<br>
-Tools share the same functionality as blocks, except by default they are a single Code member.<br> 
-They can also be an entire workflow, this allows your agents to not only run code but an entire workflow if you wish.<br>
-Configure their parameters, which can be accessed from all workflow member types.
-These parameters can be modified at runtime and re-executed, this creates a branch point which you can cycle through.
+Build integrations, daemon services, memory systems, etc.
 
-### 💻 Modules
-Modules are python files which are imported at runtime.<br>
-These are useful for things like toolkits, daemons, memory, custom pages or anything that needs persistence.
+💠 Fully Customizable UI
 
-### 📐 Customizable UI
-Includes a flexible and powerful set of base classes for building complex hierarchical configuration interfaces. 
-The entire app is built on this framework.
-Developers can modify or create configuration pages easily, even while the app is running.
+AxiomFlow ships with a flexible UI framework that supports:
 
-### 🕒 Scheduler (Premium)
-Schedule workflows to run at specific times or intervals.<br>
-Natural language expressions are supported, allowing for flexible scheduling.<br>
-For example, you can schedule a workflow to run every 5 minutes, every day at 3pm, or every 2nd Tuesday of the month.
+Hierarchical configuration pages
 
-### 📄 Structured Outputs
-Members can be configured to output structured data, thanks to [Instructor](https://github.com/instructor-ai/instructor).<br>
+Custom views for agents, workflows, settings
 
-### 📦 Addons
-Create and import custom addons to extend the functionality of Agent Pilot.<br>
+Dynamic UI rendering
 
-### 💻 Code Interpreter
-Open Interpreter is integrated into Agent Pilot, and can either be used standalone as a plugin 
-or used to execute code in 9 languages (Python, Shell, AppleScript, HTML, JavaScript, PowerShell, R, React, Ruby)
+Live reload of custom UI components
 
-Code can be executed in multiple ways:
-- From any 'Code' member in any workflow (Chat, Block, Tool).
-- From a message with the role 'Code'
+Perfect for creating enterprise dashboards or specialized views for your workflow.
 
-You should always understand the code that is being run, any code you execute is your own responsibility.
+🕒 Natural Language Scheduler
 
-For code messages, auto-run can be enabled in the settings.
-To see code messages in action talk to the pre-configured Open Interpreter agent.
+Automate workflows using natural time expressions:
 
-### 🪄 AI Generation
-Blocks under the 'System Blocks' folder are used for generating or enhancing fields.
-Claude's prompt generator is included by default, you can tweak it or create your own.
-- **Prompt** - AI enhanced user input
-- **Agent** - AI generated agent (Coming soon)
-- - **System message** - AI generated system message (Coming soon)
-- **Page** - AI generated page (Coming soon)
+"Run every 5 minutes"
+"Every 2nd Tuesday"
+"Daily at 3pm"
 
-### 🔌 Plugins
-Agent Pilot supports the following plugins:
-- **Agent** - Create custom agent behaviour.
-- - [Open Interpreter](https://github.com/KillianLucas/open-interpreter)
-- - [OpenAI Assistant](/)
-- - [CrewAI Agent](/) (Currently disabled)
-- **Workflow** - Create workflow behaviour.
-- - [CrewAI Workflow](/) (Currently disabled)
-- **Provider** - Add support for a model provider.
-- - [Litellm (100+ models)](/)
+Supports:
 
-- [Create a plugin](/)
+Recurring tasks
 
-### 👄 Voice
-**Coming back soon**<br>
-~~Agents can be linked to a text-to-speech service, combine with a personality context block and make your agent come to life!~~<br>
+Time-based triggers
 
-### 🔠 Models
-LiteLLM is integrated and supports the following providers:<br>
+Autonomous agents
 
-- AI21
-- AWS Bedrock
-- AWS Sagemaker
-- Aleph Alpha
-- Anthropic
-- Anyscale
-- Azure OpenAI
-- Baseten
-- Cloudflare
-- Cohere
-- Custom API Servers
-- DeepInfra
-- DeepSeek
-- Gemini
-- Github
-- Groq
-- Huggingface
-- Mistral
-- NLP Cloud
-- Nvidia NIM
-- Ollama
-- OpenAI
-- OpenRouter
-- PaLM API Google
-- Perplexity AI
-- Petals
-- Replicate
-- Together AI
-- VLLM
-- VertexAI Google
-- Voyage
+📄 Structured Outputs
 
-## Contributions
-Contributions to Agent Pilot are welcome and appreciated. Please feel free to submit a pull request.
+Workflows can output structured JSON using schema-guided LLM prompting — ideal for:
 
-## Known Issues
-- Be careful using auto run code and open interpreter, any chat you open, if code is the last message it will start auto running, I'll add a flag to remember if the countdown has been stopped.
-- Windows exe must have console visible due to a strange bug.
-- Issue on linux, creating venv does not install pip 
-- Changing the config of an OpenAI Assistant won't reload the assistant, for now close and reopen the chat.
+Document analyzers
 
-If you find this project useful please consider showing support by giving a star or leaving a tip :)
-<br><br>
-BTC:<br> 
-ETH: <br>
+Contract clause extraction
+
+Form filling
+
+Enterprise integrations
+
+🖥️ Code Interpreter Built-In
+
+Execute code directly inside your workflows:
+
+Python
+
+JavaScript
+
+Shell
+
+HTML
+
+Ruby
+
+PowerShell
+
+AppleScript
+
+React
+
+Create autonomous data-analysis or coding agents instantly.
+
+🎙️ Voice Mode (Coming Soon)
+
+Real-time conversational agents with TTS integration.
+
+🧬 Supported Models
+
+Thanks to integrated LiteLLM, AxiomFlow supports 100+ model providers:
+
+OpenAI
+
+Anthropic
+
+Gemini
+
+GPT-4o
+
+Groq
+
+Mistral
+
+Ollama
+
+HuggingFace
+
+Cohere
+
+AWS Bedrock
+
+NVIDIA NIM
+…and many more.
