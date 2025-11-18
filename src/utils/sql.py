@@ -140,6 +140,29 @@ def get_scalar(query, params=None, return_type='single', load_json=False):
             raise Exception(f"Unknown return type: {return_type}")
 
 
+def get_setting(field: str, default=None):
+    """
+    Convenience helper to fetch a value from the settings table.
+    Optionally inserts the default when the field does not exist yet.
+    """
+    value = get_scalar("SELECT `value` FROM `settings` WHERE `field` = ? LIMIT 1", (field,))
+    if value is None and default is not None:
+        execute("INSERT INTO `settings` (`field`, `value`) VALUES (?, ?)", (field, default))
+        return default
+    return value
+
+
+def set_setting(field: str, value):
+    """
+    Upserts a value into the settings table.
+    """
+    existing = get_scalar("SELECT 1 FROM `settings` WHERE `field` = ? LIMIT 1", (field,))
+    if existing is None:
+        execute("INSERT INTO `settings` (`field`, `value`) VALUES (?, ?)", (field, value))
+    else:
+        execute("UPDATE `settings` SET `value` = ? WHERE `field` = ?", (value, field))
+
+
 def check_database_upgrade():
     from src.utils.sql_upgrade import upgrade_script
     db_path = get_db_path()

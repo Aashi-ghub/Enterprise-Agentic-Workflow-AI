@@ -14,8 +14,8 @@ def get_stylesheet():
 
     system_config = manager.config.dict  # system.config.dict if system else {}
 
-    PRIMARY_COLOR = system_config.get('display.primary_color', '#ff11121b')
-    SECONDARY_COLOR = system_config.get('display.secondary_color', '#ff222332')
+    PRIMARY_COLOR = system_config.get('display.primary_color', '#121212')
+    SECONDARY_COLOR = system_config.get('display.secondary_color', '#1f1f1f')
     TEXT_COLOR = system_config.get('display.text_color', '#c4c4c4')
     TEXT_SIZE = system_config.get('display.text_size', 12)
     PARAM_COLOR = system_config.get('display.parameter_color', '#c4c4c4')
@@ -38,6 +38,27 @@ QWidget.central {{
     border-radius: 14px;
     border-top-left-radius: 30px;
     border-bottom-right-radius: 0px;
+}}
+QWidget#chat-helper {{
+    background-color: {apply_alpha_to_hex(SECONDARY_COLOR, 0.85)};
+    border: 1px solid {apply_alpha_to_hex(TEXT_COLOR, 0.12)};
+    border-radius: 12px;
+    padding: 12px;
+}}
+QLabel#chat-helper-title {{
+    color: {TEXT_COLOR};
+    font-weight: bold;
+}}
+QLabel#chat-helper-body {{
+    color: {apply_alpha_to_hex(TEXT_COLOR, 0.85)};
+}}
+QPushButton#chat-helper-action {{
+    background-color: {apply_alpha_to_hex(TEXT_COLOR, 0.08)};
+    border-radius: 6px;
+    padding: 4px 10px;
+}}
+QPushButton#chat-helper-action:hover {{
+    background-color: {apply_alpha_to_hex(TEXT_COLOR, 0.15)};
 }}
 QWidget.edit-bar {{
     background-color: {SECONDARY_COLOR};

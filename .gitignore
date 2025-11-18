@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+.venv310/
+venv/
+env/
+ENV/
+
+# Distribution / build artifacts
+build/
+dist/
+*.spec
+
+# IDE / editor settings
+.idea/
+.vscode/
+
+# Logs / local data
+*.log
+*.sqlite3
+*.db
+.DS_Store
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Test & coverage
+.pytest_cache/
+.coverage
+coverage.xml
+
+

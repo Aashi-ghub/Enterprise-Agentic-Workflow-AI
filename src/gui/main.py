@@ -147,6 +147,155 @@ In no event shall Agent Pilot or it's creators be liable to you or anyone else f
         layout.addLayout(h_layout)
 
 
+class FirstRunDialog(QDialog):
+    tour_completed = Signal()
+
+    def __init__(self, main_window):
+        super().__init__(parent=main_window)
+        self.main = main_window
+        self.setWindowTitle("Welcome to Agent Pilot")
+        self.setWindowIcon(QIcon(':/resources/icon.png'))
+        self.setModal(True)
+        self.setMinimumSize(480, 360)
+        self.setWindowFlags(Qt.Window | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
+
+        self.steps = [
+            {
+                'title': 'Connect a model provider',
+                'summary': 'Agent Pilot needs at least one API key before it can reply.',
+                'bullets': [
+                    'Open Settings → Models.',
+                    'Add a provider (OpenAI, Anthropic, etc.) and paste an API key.',
+                    'Pick a default chat model so new agents can use it instantly.'
+                ],
+                'cta': 'Open provider settings',
+                'action': self.main.open_models_settings,
+            },
+            {
+                'title': 'Create or reuse an agent/workflow',
+                'summary': 'Agents store prompts, tools, and multi-member workflows.',
+                'bullets': [
+                    'Go to the Agents page.',
+                    'Use “+ Agent” to start fresh or duplicate an existing template.',
+                    'Add members/blocks to build multi-step workflows visually.'
+                ],
+                'cta': 'Open Agents',
+                'action': lambda: self.main.navigate_to_main_page('Agents'),
+            },
+            {
+                'title': 'Start chatting',
+                'summary': 'Everything lives in the Chat page—branch conversations, rerun steps, and attach files.',
+                'bullets': [
+                    'Double-click an agent to launch a chat.',
+                    'Branch messages to iterate without losing context.',
+                    'Use the + button to add more members mid-conversation.'
+                ],
+                'cta': 'Jump to Chat',
+                'action': lambda: self.main.navigate_to_main_page('Chat'),
+            },
+        ]
+        self.current_step = 0
+
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(24, 24, 24, 24)
+        outer.setSpacing(16)
+
+        self.step_label = QLabel()
+        self.step_label.setObjectName("stepLabel")
+        font = self.step_label.font()
+        font.setPointSize(font.pointSize() + 1)
+        font.setBold(True)
+        self.step_label.setFont(font)
+
+        self.title_label = QLabel()
+        title_font = self.title_label.font()
+        title_font.setPointSize(title_font.pointSize() + 3)
+        title_font.setBold(True)
+        self.title_label.setFont(title_font)
+
+        self.summary_label = QLabel()
+        self.summary_label.setWordWrap(True)
+
+        self.bullets_label = QLabel()
+        self.bullets_label.setWordWrap(True)
+
+        self.cta_button = QPushButton()
+        self.cta_button.clicked.connect(self.handle_cta)
+
+        self.progress = QProgressBar()
+        self.progress.setRange(0, len(self.steps))
+
+        outer.addWidget(self.step_label)
+        outer.addWidget(self.title_label)
+        outer.addWidget(self.summary_label)
+        outer.addWidget(self.bullets_label)
+        outer.addWidget(self.cta_button, alignment=Qt.AlignLeft)
+        outer.addStretch(1)
+        outer.addWidget(self.progress)
+
+        button_bar = QHBoxLayout()
+        self.skip_button = QPushButton("Skip tour")
+        self.skip_button.clicked.connect(self.skip_tour)
+        self.prev_button = QPushButton("Back")
+        self.prev_button.clicked.connect(self.prev_step)
+        self.next_button = QPushButton("Next")
+        self.next_button.clicked.connect(self.next_step)
+
+        button_bar.addWidget(self.skip_button)
+        button_bar.addStretch(1)
+        button_bar.addWidget(self.prev_button)
+        button_bar.addWidget(self.next_button)
+
+        outer.addLayout(button_bar)
+
+        self.update_step()
+
+    def update_step(self):
+        step = self.steps[self.current_step]
+        total = len(self.steps)
+        self.step_label.setText(f"Step {self.current_step + 1} of {total}")
+        self.title_label.setText(step['title'])
+        self.summary_label.setText(step['summary'])
+
+        bullet_html = '<ul style="margin-left: 18px;">' + ''.join(f'<li>{text}</li>' for text in step['bullets']) + '</ul>'
+        self.bullets_label.setText(bullet_html)
+
+        has_cta = bool(step.get('cta'))
+        self.cta_button.setVisible(has_cta)
+        if has_cta:
+            self.cta_button.setText(step['cta'])
+
+        self.prev_button.setEnabled(self.current_step > 0)
+        self.next_button.setText("Done" if self.current_step == total - 1 else "Next")
+        self.progress.setValue(self.current_step + 1)
+
+    def handle_cta(self):
+        step = self.steps[self.current_step]
+        action = step.get('action')
+        if callable(action):
+            action()
+
+    def next_step(self):
+        if self.current_step == len(self.steps) - 1:
+            self.finish_tour()
+            return
+        self.current_step += 1
+        self.update_step()
+
+    def prev_step(self):
+        if self.current_step == 0:
+            return
+        self.current_step -= 1
+        self.update_step()
+
+    def skip_tour(self):
+        self.finish_tour()
+
+    def finish_tour(self):
+        self.tour_completed.emit()
+        self.accept()
+
+
 class TitleButtonBar(QWidget):
     def __init__(self, parent):
         super().__init__(parent=parent)
@@ -620,6 +769,7 @@ class MessageText(QTextEdit):
         self.setFixedHeight(46)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.setProperty("class", "msgbox")
+        self.setPlaceholderText("Type a message... (Shift+Enter for newline)")
 
         self.button_bar = MessageButtonBar(self)
         self.button_bar.setFixedHeight(46)
@@ -870,6 +1020,7 @@ class Main(QMainWindow):
         self.page_contexts = self.main_menu.pages['Contexts']
         self.page_agents = self.main_menu.pages['Agents']
         self.page_settings = self.main_menu.pages['Settings']
+        self.onboarding_dialog = None
 
         self.layout.addWidget(self.main_menu)
 
@@ -923,6 +1074,7 @@ class Main(QMainWindow):
         self.move(new_x, new_y)
 
         self.notification_manager.update_position()
+        QTimer.singleShot(800, self.maybe_show_onboarding)
 
     def pinned_pages(self):
         all_pinned_pages = {'Chat', 'Contexts', 'Agents', 'Settings'}
@@ -932,6 +1084,41 @@ class Main(QMainWindow):
         )
         all_pinned_pages.update(pinned_pages)
         return all_pinned_pages
+
+    def maybe_show_onboarding(self):
+        onboarding_done = sql.get_setting('onboarding_complete', '0')
+        if str(onboarding_done) == '1':
+            return
+        if self.onboarding_dialog:
+            if not self.onboarding_dialog.isHidden():
+                return
+        self.onboarding_dialog = FirstRunDialog(self)
+        self.onboarding_dialog.tour_completed.connect(self.mark_onboarding_complete)
+        self.onboarding_dialog.finished.connect(lambda _: setattr(self, 'onboarding_dialog', None))
+        self.onboarding_dialog.show()
+
+    def mark_onboarding_complete(self):
+        sql.set_setting('onboarding_complete', '1')
+
+    def navigate_to_main_page(self, page_name: str):
+        sidebar = getattr(self.main_menu, 'settings_sidebar', None)
+        if not sidebar:
+            return
+        button = sidebar.page_buttons.get(page_name)
+        if button:
+            button.click()
+
+    def navigate_to_settings_page(self, subpage: str):
+        self.navigate_to_main_page('Settings')
+        settings_sidebar = getattr(self.page_settings, 'settings_sidebar', None)
+        if not settings_sidebar:
+            return
+        button = settings_sidebar.page_buttons.get(subpage)
+        if button:
+            button.click()
+
+    def open_models_settings(self):
+        self.navigate_to_settings_page('Models')
 
     def pinnable_pages(self):
         all_pinnable_pages = {'Blocks', 'Tools', 'Modules'}

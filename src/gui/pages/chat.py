@@ -29,10 +29,14 @@ class Page_Chat(QWidget):
         self.layout = CVBoxLayout(self)
 
         self.top_bar = self.Top_Bar(self)
+        self.helper_banner = self.HelperBanner(self)
         self.workflow_params_input = self.WorkflowParamsInput(self)
 
         self.layout.addWidget(self.top_bar)
+        self.layout.addWidget(self.helper_banner)
         self.layout.addWidget(self.workflow_params_input)
+        if not self.should_show_helper():
+            self.helper_banner.hide()
 
         self.page_splitter = QSplitter(Qt.Vertical)
         self.page_splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -67,6 +71,10 @@ class Page_Chat(QWidget):
         self.message_collection.load()
 
         self.workflow_params_input.load()
+        if self.should_show_helper():
+            self.helper_banner.show()
+        else:
+            self.helper_banner.hide()
 
     def get_selected_item_id(self):  # hack
         return self.workflow.context_id
@@ -296,6 +304,76 @@ class Page_Chat(QWidget):
         def save_config(self):
             params_config = self.get_config()
             self.parent.workflow.params = {k.lower(): v for k, v in params_config.items()}
+
+    class HelperBanner(QWidget):
+        def __init__(self, parent):
+            super().__init__(parent)
+            self.parent = parent
+            self.setObjectName("chat-helper")
+
+            outer_layout = CHBoxLayout(self)
+            outer_layout.setContentsMargins(12, 8, 12, 8)
+            outer_layout.setSpacing(16)
+
+            text_column = QVBoxLayout()
+            text_column.setSpacing(6)
+
+            title = QLabel("Getting started in chat")
+            title.setObjectName("chat-helper-title")
+            text_column.addWidget(title)
+
+            body = QLabel(
+                "1. Pick or create an agent\n"
+                "2. Configure workflow members\n"
+                "3. Start the conversation or rerun a branch"
+            )
+            body.setObjectName("chat-helper-body")
+            body.setWordWrap(True)
+            text_column.addWidget(body)
+
+            text_column.addStretch(1)
+            outer_layout.addLayout(text_column, 2)
+
+            actions_column = QVBoxLayout()
+            actions_column.setSpacing(6)
+
+            self.btn_agents = QPushButton("Choose agent")
+            self.btn_agents.setObjectName("chat-helper-action")
+            self.btn_agents.clicked.connect(lambda: self.parent.main.navigate_to_main_page('Agents'))
+
+            self.btn_workflow = QPushButton("Edit workflow")
+            self.btn_workflow.setObjectName("chat-helper-action")
+            self.btn_workflow.clicked.connect(self.toggle_workflow_settings)
+
+            self.btn_providers = QPushButton("Add model/API key")
+            self.btn_providers.setObjectName("chat-helper-action")
+            self.btn_providers.clicked.connect(self.parent.main.open_models_settings)
+
+            for btn in (self.btn_agents, self.btn_workflow, self.btn_providers):
+                actions_column.addWidget(btn)
+
+            hide_button = QPushButton("Hide tips")
+            hide_button.setFlat(True)
+            hide_button.clicked.connect(self.parent.dismiss_helper_banner)
+            actions_column.addWidget(hide_button)
+            actions_column.addStretch(1)
+
+            outer_layout.addLayout(actions_column, 1)
+
+        def toggle_workflow_settings(self):
+            settings_panel = self.parent.workflow_settings
+            if not settings_panel.isVisible():
+                settings_panel.show()
+                settings_panel.load()
+            else:
+                settings_panel.hide()
+
+    def should_show_helper(self):
+        return sql.get_setting('chat_helper_dismissed', '0') != '1'
+
+    def dismiss_helper_banner(self):
+        sql.set_setting('chat_helper_dismissed', '1')
+        self.helper_banner.hide()
 
 
     class AttachmentBar(QWidget):
